@@ -1,24 +1,23 @@
 var Promise = require('bluebird');
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
 module.exports = {
 
   scheduleAppointment: function(req, res) {
-    var groomers = req.body.groomers;
+    var groomers = req.body.groomers || [];
     if (groomers.length < 1) {
       return res.notFound();
     }
     return Promise.delay(2000)
       .then(function() {
-        var random = Math.random();
-        if (random > 0.1) {
-          var out = {
-            groomer: groomers[0],
-            date: req.body.date
-          };
-          return res.json(out);
-        } else {
-          return res.notFound();
-        }
+        var out = {
+          groomer: groomers[getRandomInt(0, groomers.length)],
+          date: req.body.date
+        };
+        return res.json(out);
       });
   }
 
